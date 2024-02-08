@@ -1,5 +1,5 @@
-from optim.BiasedADTrainer import BiasedADTrainer
-from optim.BiasedADMTrainer import BiasedADMTrainer
+from optim.GADSTrainer import GADSTrainer
+from optim.GADSTrainer import GADSTrainer
 from networks.main import build_network, build_autoencoder
 from optim.AETrainer import AETrainer
 import numpy as np
@@ -8,10 +8,10 @@ import torch
 from utils.write2txt import writer2txt
 from collections import Counter
 
-class BiasedAD(object):
+class GAD(object):
 
     def __init__(self, eta_0: float = 1.0, eta_1: float = 1.0, eta_2: float = 2.0, model_type: str = "BiasedAD", update_anchor=None, debug=False, update_epoch = None):
-        """Inits BAD with hyperparameter eta."""
+        """Inits GAD with hyperparameter eta."""
         self.eta_0 = eta_0
         self.eta_1 = eta_1
         self.eta_2 = eta_2
@@ -54,16 +54,16 @@ class BiasedAD(object):
     def train(self, dataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 50,
               lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
               n_jobs_dataloader: int = 0, sample_count: int=100):
-        """Trains the BAD model on the training data."""
+        """Trains the GAD model on the training data."""
 
         self.optimizer_name = optimizer_name
         
         if self.model_type == "BiasedAD":
-            self.trainer = BiasedADTrainer(self.c, self.anchor, self.eta_0, self.eta_1, self.eta_2, optimizer_name=optimizer_name, lr=lr, n_epochs=n_epochs,
+            self.trainer = GADSTrainer(self.c, self.anchor, self.eta_0, self.eta_1, self.eta_2, optimizer_name=optimizer_name, lr=lr, n_epochs=n_epochs,
                                     lr_milestones=lr_milestones, batch_size=batch_size, weight_decay=weight_decay,
                                     device=device, n_jobs_dataloader=n_jobs_dataloader, sample_count=sample_count, debug = self.debug)
         elif self.model_type == "BiasedADM":
-            self.trainer = BiasedADMTrainer(self.c, self.anchor, self.eta_0, self.eta_1, self.eta_2, optimizer_name=optimizer_name, lr=lr, n_epochs=n_epochs,
+            self.trainer = GADSTrainer(self.c, self.anchor, self.eta_0, self.eta_1, self.eta_2, optimizer_name=optimizer_name, lr=lr, n_epochs=n_epochs,
                                     lr_milestones=lr_milestones, batch_size=batch_size, weight_decay=weight_decay,
                                     device=device, n_jobs_dataloader=n_jobs_dataloader, sample_count=sample_count, update_anchor=self.update_anchor, debug = self.debug, update_epoch = self.update_epoch)
         # run time statistics
@@ -82,7 +82,7 @@ class BiasedAD(object):
         self.anchor = self.trainer.anchor.cpu().data.numpy().tolist()
 
     def test(self, dataset, device: str = 'cuda', n_jobs_dataloader: int = 0):
-        """Tests the BAD model on the test data."""
+        """Tests the GAD model on the test data."""
 
         self.trainer.test(dataset, self.net)
 
@@ -98,7 +98,7 @@ class BiasedAD(object):
     def pretrain(self, dataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 100,
                  lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
                  n_jobs_dataloader: int = 0):
-        """Pretrains the weights for the BAD network phi via autoencoder."""
+        """Pretrains the weights for the GAD network phi via autoencoder."""
 
         # Set autoencoder network
         self.ae_net = build_autoencoder(self.net_name)
@@ -120,11 +120,11 @@ class BiasedAD(object):
         self.ae_results['test_auc'] = self.ae_trainer.test_auc
         self.ae_results['test_time'] = self.ae_trainer.test_time
 
-        # Initialize BAD network weights from pre-trained encoder
+        # Initialize GAD network weights from pre-trained encoder
         self.init_network_weights_from_pretraining()
 
     def init_network_weights_from_pretraining(self):
-        """Initialize the BAD network weights from the encoder weights of the pretraining autoencoder."""
+        """Initialize the GAD network weights from the encoder weights of the pretraining autoencoder."""
 
         net_dict = self.net.state_dict()
         ae_net_dict = self.ae_net.state_dict()
@@ -137,7 +137,7 @@ class BiasedAD(object):
         self.net.load_state_dict(net_dict)
 
     def save_model(self, export_model, save_ae=True):
-        """Save BAD model to export_model."""
+        """Save GAD model to export_model."""
 
         net_dict = self.net.state_dict()
         ae_net_dict = self.ae_net.state_dict() if save_ae else None
@@ -147,7 +147,7 @@ class BiasedAD(object):
                     'ae_net_dict': ae_net_dict}, export_model)
 
     def load_model(self, model_path, load_ae=False, map_location='cpu'):
-        """Load BAD model from model_path."""
+        """Load GAD model from model_path."""
 
         model_dict = torch.load(model_path, map_location=map_location)
 

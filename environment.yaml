@@ -1,4 +1,4 @@
-name: BAD
+name: GAD
 channels:
   - defaults
 dependencies:
@@ -103,4 +103,3 @@ dependencies:
       - thop==0.1.1-2209072238
       - traitlets==5.9.0
       - wcwidth==0.2.9
-prefix: /home/hzw/anaconda3/envs/BAD

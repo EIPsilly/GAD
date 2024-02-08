@@ -1,4 +1,4 @@
-# BiasedAD
+# GAD
 
 ## environment
 
@@ -15,32 +15,32 @@ conda env create -f environment.yml
 
 For the fashionMNIST dataset, our training data contains three categories: normal, non_target, and target, which need to be explicitly specified in the sh command.
 
-**$\text{BiasedAD}$**
+**$\text{GAD}^{f-partial}$**
 
 ```sh
-exec -a "BAD_420" python main.py --model_type BiasedAD --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 2 --target_outlier_class 0 --gpu 2 --random_seed 0&
+python main.py --model_type GADF --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 2 --target_outlier_class 0 --gpu 2 --random_seed 0&
 ```
 
-**$\text{BiasedAD}^\text{M}$**
+**$\text{GAD}^{s-partial}$**
 
-$\text{BiasedAD}^\text{M}$ is similar to $\text{BiasedAD}$. Although the command includes ``--non_target_outlier_class``, the number of non-target anomalies is set to 0 during runtime. The required sampling count is set to default 100 and does not need to be explicitly declared.
+$\text{GAD}^{s-partial}$ is similar to $\text{GAD}^{f-partial}$. Although the command includes ``--non_target_outlier_class``, the number of non-target anomalies is set to 0 during runtime. The required sampling count is set to default 100 and does not need to be explicitly declared.
 
 ```sh
-exec -a "BADM_420" python main.py --model_type BiasedADM --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 2 --target_outlier_class 0 --gpu 2 --random_seed 0 &
+python main.py --model_type GADS --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 2 --target_outlier_class 0 --gpu 2 --random_seed 0 &
 ```
 
 ## nb-15
 
-**$\text{BiasedAD}$**
+**$\text{GAD}^{f-partial}$**
 
 ```sh
-exec -a "BAD_nb15" python main.py --model_type BiasedAD --dir_path ./result/nb15 --dataset_name nb15 --gpu 2 --random_seed 0&
+python main.py --model_type GADF --dir_path ./result/nb15 --dataset_name nb15 --gpu 2 --random_seed 0&
 ```
 
-**$\text{BiasedAD}^\text{M}$**
+**$\text{GAD}^{s-partial}$**
 
-$\text{BiasedAD}^\text{M}$ adds the parameter ``--sample_count`` compared to $\text{BiasedAD}$. Since the default sampling count is 100, which is specific to the fashionMNIST dataset, it's necessary to declare ``--sample_count 1000``
+$\text{GAD}^{s-partial}$ adds the parameter ``--sample_count`` compared to $\text{GAD}^{f-partial}$. Since the default sampling count is 100, which is specific to the fashionMNIST dataset, it's necessary to declare ``--sample_count 1000``
 
 ```sh
-exec -a "BADM_nb15" python main.py --model_type BiasedADM --dir_path ./result/nb15 --dataset_name nb15 --gpu 0 --sample_count 1000 --random_seed 0 &
+python main.py --model_type GADS --dir_path ./result/nb15 --dataset_name nb15 --gpu 0 --sample_count 1000 --random_seed 0 &
 ```
