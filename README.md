@@ -29,6 +29,14 @@ $\text{GAD}^{s-partial}$ is similar to $\text{GAD}^{f-partial}$. Although the co
 python main.py --model_type GADS --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 2 --target_outlier_class 0 --gpu 2 --random_seed 0 &
 ```
 
+**$\text{GAD}^{con}$**
+
+The code for $\text{GAD}^{con}$ is identical to that of $\text{GAD}^{s-partial}$, but it utilizes data from conventional anomaly detection tasks.
+
+```sh
+python main.py --model_type GADS --dir_path ./result/fmnist --dataset_name fashionmnist --normal_class 4 --non_target_outlier_class 4 --target_outlier_class 6 --gpu 2 --random_seed 0 &
+```
+
 ## nb-15
 
 **$\text{GAD}^{f-partial}$**
