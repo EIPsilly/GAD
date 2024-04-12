@@ -1,3 +1,4 @@
-![](images/GAD^con vs RF2.jpg)
+![](images/GAD^con_vs_RF2.jpg)
 
-![](images/GAD^f vs RF3 and SAD+RF2.jpg)
+![](images/GAD^f_vs_RF3_and_SAD+RF2.jpg)
+
